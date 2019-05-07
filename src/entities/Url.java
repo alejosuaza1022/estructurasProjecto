@@ -6,26 +6,24 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 /**
  *
  * @author asb1022
  */
 public class Url implements Comparable<Url>{
-    private String name;
-    private ArrayList<KeyWord> keyWords;
+    
+    private final String url;
+    private TreeSet<KeyWord> keyWords;
 
-    public Url(String name) {
-        this.name = name;
-        keyWords = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
+    public Url(String url) {
+        this.url = url;
+        keyWords = new TreeSet<>();
     }
 
     public ArrayList<KeyWord> getKeyWords() {
-        return keyWords;
+        return new ArrayList<>(keyWords);
     }
     
     public void AddKeyWord(KeyWord keyword){
@@ -34,12 +32,15 @@ public class Url implements Comparable<Url>{
 
     @Override
     public int compareTo(Url o) {
-        return name.compareTo(o.name);
+        return url.compareTo(o.url);
     }
     
     public void deleteKeyword(KeyWord keyWord){
         keyWords.remove(keyWord);
     }
     
-    
+    @Override
+    public String toString() {
+        return url;
+    }
 }

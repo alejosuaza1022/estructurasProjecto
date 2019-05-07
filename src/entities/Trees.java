@@ -22,20 +22,23 @@ public class Trees {
     /////////singleton 
     //////////////
     
-    public static Trees InstanceTress = null;
+    private static Trees InstanceTress = null;
 
     private Trees() {
         KeyWords = new BinaryTree<>();
         url = new BinaryTree<>();
+        listKeyWords = new ArrayList<>();
     }
 
-    public Trees getInstance() {
+    public static Trees getInstance() {
         if (InstanceTress == null)   InstanceTress = new Trees();
         return InstanceTress;
     }
+    
     ///////////////
     /////////atributtes
     //////////////
+    
     private BinaryTree<KeyWord> KeyWords;
     
     private ArrayList<KeyWord> listKeyWords;
@@ -45,26 +48,29 @@ public class Trees {
     ///////////////
     /////////getters and setters
     //////////////
-    public BinaryTree<KeyWord> getKeyWords() {
+    public BinaryTree<KeyWord> getKeyWordsTree() {
         return KeyWords;
     }
 
-    public BinaryTree<Url> getUrl() {
+    public BinaryTree<Url> getUrlTree() {
         return url;
     }
 
     public ArrayList<Url> searchByKeyWord(String ... names){
-        TreeSet<Url> listRetorno = new TreeSet<>(); 
-        for (int i = 0; i < names.length; i++) {
-            String name = names [i];
+        TreeSet<Url> toReturn = new TreeSet<>(); 
+        for(String name : names) {
             KeyWord word = new KeyWord(name);
             word = KeyWords.getItem(word);
-            listRetorno.addAll(word.getUrls());
-         }
-        ArrayList<Url> list = new ArrayList<>(listRetorno);
-        return list;
+            toReturn.addAll(word.getUrls());
+        }
+        return new ArrayList<>(toReturn);
     }
-   
     
+    public ArrayList<Url> searchByUrl(String toSearch) {
+        return url.getListCoincidence(toSearch);
+    }
     
+    public ArrayList<KeyWord> getKeyWordList() {
+        return listKeyWords;
+    }
 }
