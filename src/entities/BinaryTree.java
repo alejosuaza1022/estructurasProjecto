@@ -16,27 +16,8 @@ import javax.swing.text.Position;
  * @author asb1022
  */
 public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
-
-    @Override
-    public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            Queue<BinaryNode<T>> list = new LinkedList<BinaryNode<T>>();
-            {list.add(root);}
-            @Override
-            public boolean hasNext() {
-                return list.peek() != null;
-            }
-
-            @Override
-            public T next() {
-              BinaryNode<T> node = list.remove();
-                if(node.left != null)list.add(node.left);
-                if(node.right != null)list.add(node.right);
-                return node.item;
-              }
-        };
-
-    }
+    
+    private BinaryNode<T> root;
 
     private class BinaryNode<T extends Comparable<T>> implements Comparable<BinaryNode<T>> {
 
@@ -62,26 +43,6 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
 
     }
    
-    public String toStringLevelOrder() {
-        Queue c = new LinkedList();{{ c.add(root);}};
-        return toStringLevelOrder(c);
-    }
-
-    private String toStringLevelOrder(Queue list) {
-        if (list.isEmpty()) 
-            return "";
-        else {
-            BinaryNode n = (BinaryNode) list.remove();
-            if (n.left != null)  list.add(n.left);
-            if (n.right != null) list.add(n.right);
-            String r = n.item.toString();
-            return r += toStringLevelOrder(list);
-        }
-    }
-    
-    
-    
-    
     private  void insert(BinaryNode<T> nodeCurrent, BinaryNode<T> nodeParent, T item){
      if(nodeCurrent == null){
             if(item.compareTo(nodeParent.item)<=0) nodeParent.left = new BinaryNode<>(item,null,null);
@@ -94,44 +55,45 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
              return;
          }
     }
+    
     public void insert(T item){
         if(root == null) root = new BinaryNode<>(item, null,null);
         else
         insert(root, null, item);
     }
-
- 
-        
     
-    /////////////////////////////////
-    //////////
-    /////////////////////////////////
-        private T getItem(T item,BinaryNode<T> current){
+    public ArrayList<T> getListCoincidence(String toSearch) {
+        BinaryNode<T> newRoot = getNodeCoincidence(toSearch, root);
+        BinaryTree<T> subTree = new BinaryTree<>();
+        subTree.root = newRoot;
+        ArrayList<T> toReturn = new ArrayList<>();
+        for(T item: subTree) {
+            if(item.toString().startsWith(toSearch)) toReturn.add(item);
+        }
+        return toReturn;
+    }
+    
+    private BinaryNode<T> getNodeCoincidence(String toSearch, BinaryNode<T> current) {
+        if(current == null) return null;
+        else if(current.item.toString().startsWith(toSearch)) return current;
+        else {
+            if(toSearch.compareTo(current.item.toString()) < 0) return getNodeCoincidence(toSearch, current.left);
+            else return getNodeCoincidence(toSearch, current.right);
+        }
+    }
+
+    private T getItem(T item, BinaryNode<T> current){
         if(current == null)
             return null;
         else {
-            if(item.compareTo(current.item)==0) return current.item;
-            else if(item.compareTo(current.item)<0) return getItem(item, current.left);
+            if(item.compareTo(current.item) == 0) return current.item;
+            else if(item.compareTo(current.item) < 0) return getItem(item, current.left);
             return getItem(item, current.right);
         }
     }
         public T getItem(T item){
         return getItem(item, root);
     }
-  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private BinaryNode<T> root;
- 
-   
   
     public String toStringPreOrder() {
         return toStringPreOrder(root);
@@ -181,8 +143,44 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         r += node.item;
         return r;
     }
+    
+    public String toStringLevelOrder() {
+        Queue c = new LinkedList();{{ c.add(root);}};
+        return toStringLevelOrder(c);
+    }
 
+    private String toStringLevelOrder(Queue list) {
+        if (list.isEmpty()) 
+            return "";
+        else {
+            BinaryNode n = (BinaryNode) list.remove();
+            if (n.left != null)  list.add(n.left);
+            if (n.right != null) list.add(n.right);
+            String r = n.item.toString();
+            return r += toStringLevelOrder(list);
+        }
+    }
+    
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            Queue<BinaryNode<T>> list = new LinkedList<BinaryNode<T>>();
+            {list.add(root);}
+            @Override
+            public boolean hasNext() {
+                return list.peek() != null;
+            }
 
+            @Override
+            public T next() {
+              BinaryNode<T> node = list.remove();
+                if(node.left != null)list.add(node.left);
+                if(node.right != null)list.add(node.right);
+                return node.item;
+              }
+        };
+
+    }
 }
     
     

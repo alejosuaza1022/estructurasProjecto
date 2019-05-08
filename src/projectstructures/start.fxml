@@ -11,7 +11,7 @@
 
 <BorderPane fx:id="startMenu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectstructures.StartController">
    <left>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #303030;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ff5722;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnSearch" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#search" onMouseEntered="#btnHoverOn" onMouseExited="#btnHoverOff" onMousePressed="#btnPressed" onMouseReleased="#btnRealeased" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;" text="Buscar">
                <VBox.margin>
@@ -44,7 +44,7 @@
       </VBox>
    </left>
    <top>
-      <BorderPane BorderPane.alignment="CENTER">
+      <BorderPane onMouseDragged="#toolBarDragged" onMousePressed="#toolBarPressed" style="-fx-background-color: #303f9f;" BorderPane.alignment="CENTER">
          <right>
             <ImageView fx:id="btnClose" fitHeight="32.0" fitWidth="32.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
@@ -53,7 +53,7 @@
             </ImageView>
          </right>
          <left>
-            <Label alignment="CENTER" text="Googleplex" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" text="Googleplex" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>

@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,8 +31,8 @@ public class StartController implements Initializable {
     
     private double x, y;
     private final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent; -fx-text-fill: #f0f0f0;";
-    private final String HOVER_BUTTON_STYLE = "-fx-background-color: #404040; -fx-text-fill: #f0f0f0";
-    private final String PRESSED_BUTTON_STYLE = "-fx-background-color: #606060; -fx-text-fill: #f0f0f0";
+    private final String HOVER_BUTTON_STYLE = "-fx-background-color: #f9bb04; -fx-text-fill: #000000";
+    private final String PRESSED_BUTTON_STYLE = "-fx-background-color: #505050; -fx-text-fill: #f0f0f0";
 
     @FXML
     private ImageView btnClose;
