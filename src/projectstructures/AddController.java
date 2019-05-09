@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -34,6 +35,14 @@ public class AddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        btnAdd.setOnKeyTyped((event) -> {
+            String toComplete = txtUrl.getText();
+            System.out.println(toComplete);
+            if(!toComplete.startsWith("www.")){
+                toComplete = "www."+toComplete;
+            }
+            txtUrl.setText(toComplete);
+        });
     }    
 
     @FXML
@@ -43,7 +52,18 @@ public class AddController implements Initializable {
         BinaryTree<Url> urls = Trees.getInstance().getUrlTree();
         if(urls.getItem(newUrl) == null)
             urls.insert(newUrl);
+         txtUrl.setText("");
         //Mandar a la ventana de la url para editar las palabras clave.
+    }
+
+    @FXML
+    private void addWWW(KeyEvent event) {
+        String toComplete = txtUrl.getText();
+        if(!toComplete.startsWith("www.")){
+            txtUrl.setText("");
+            toComplete = "www.";
+            txtUrl.setText(toComplete);
+        }
     }
     
 }
