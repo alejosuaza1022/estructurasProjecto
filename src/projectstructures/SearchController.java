@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -46,6 +47,8 @@ public class SearchController implements Initializable {
     private ListView<Url> listResult;
     @FXML
     private VBox searchWindow;
+    @FXML
+    private Label lblTime;
 
     /**
      * Initializes the controller class.
@@ -59,9 +62,14 @@ public class SearchController implements Initializable {
     private void searchByTag(MouseEvent event) {
         String toSearch = txtSearch.getText();
         String[] keyWords = toSearch.split(" ");
+        Long iniMS = System.currentTimeMillis();
         ArrayList<Url> searchResult = Trees.getInstance().searchByKeyWord(keyWords);
+        Long finMS = System.currentTimeMillis();
         observable = FXCollections.observableArrayList(searchResult);
         listResult.setItems(observable);
+        
+        Long time = finMS - iniMS;
+        lblTime.setText(searchResult.size() + " resultados en : " + time + " milisegundos.");
     }
 
     @FXML
@@ -76,14 +84,16 @@ public class SearchController implements Initializable {
     private void urlClicked(MouseEvent event) throws IOException {
         Url urlClicked = listResult.getSelectionModel().getSelectedItem();
         
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("urlWindow.fxml"));
-        Parent urlWindow = loader.load();
-        
-        Scene urlScene = new Scene(urlWindow);
-        UrlWindowController controler = loader.getController();
-        controler.initData(urlClicked);
-        BorderPane parent = (BorderPane) searchWindow.getParent();
-        parent.setCenter(urlWindow);
+        if(urlClicked != null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("urlWindow.fxml"));
+            Parent urlWindow = loader.load();
+
+            Scene urlScene = new Scene(urlWindow);
+            UrlWindowController controler = loader.getController();
+            controler.initData(urlClicked);
+            BorderPane parent = (BorderPane) searchWindow.getParent();
+            parent.setCenter(urlWindow);
+        }
     }
 }

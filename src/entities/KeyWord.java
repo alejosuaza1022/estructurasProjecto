@@ -39,5 +39,20 @@ public class KeyWord implements Comparable<KeyWord>{
         return name.compareTo(o.name);
     }
      
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof String) {
+            return o.toString().equals(name);   
+        }
+            
+        else if (o instanceof KeyWord) {
+            return ((KeyWord) o).name.equals(name);
+        }
+        return false;
+    }
     
+    @Override
+    public String toString() {
+        return name;
+    }
 }
