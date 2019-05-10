@@ -9,6 +9,7 @@ import entities.KeyWord;
 import entities.Trees;
 import entities.Url;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +30,8 @@ import org.controlsfx.control.textfield.TextFields;
 public class UrlWindowController implements Initializable {
     
     public Url url;
+    private ArrayList<KeyWord> keyWords;
+    private ObservableList<KeyWord> observable; 
 
     @FXML
     private TextField txtKeyWord;
@@ -53,12 +56,32 @@ public class UrlWindowController implements Initializable {
     }
     
     public void initData(Url url) {
+        this.url = url;
+        keyWords = Trees.getInstance().getKeyWordList();
         lblUrl.setText(url.toString());
-        
-            TextFields.bindAutoCompletion(txtKeyWord, Trees.getInstance().getKeyWordList());
-        ObservableList<KeyWord> observable = FXCollections.observableArrayList(url.getKeyWords());
+        TextFields.bindAutoCompletion(txtKeyWord, keyWords);
+        observable = FXCollections.observableArrayList(url.getKeyWords());
         listKeyWords.setItems(observable);
         
     }
-    
+
+    @FXML
+    private void deleteURL(MouseEvent event) {
+    }
+
+    @FXML
+    private void addKeyWord(MouseEvent event) {
+        String stringKeyWord = txtKeyWord.getText();
+        if(keyWords.contains(new KeyWord(stringKeyWord))) {
+            KeyWord oldKeyWord = keyWords.get(keyWords.indexOf(new KeyWord(stringKeyWord)));
+            url.AddKeyWord(oldKeyWord);
+            oldKeyWord.AddUrl(url);
+        } else {
+            KeyWord newKeyWord = new KeyWord(stringKeyWord);
+            newKeyWord.AddUrl(url);
+            url.AddKeyWord(newKeyWord);
+            Trees.getInstance().addKeyWord(newKeyWord);
+        }
+        observable.setAll(url.getKeyWords());
+    }
 }

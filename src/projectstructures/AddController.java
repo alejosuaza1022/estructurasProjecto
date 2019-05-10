@@ -52,7 +52,7 @@ public class AddController implements Initializable {
         BinaryTree<Url> urls = Trees.getInstance().getUrlTree();
         if(urls.getItem(newUrl) == null)
             urls.insert(newUrl);
-         txtUrl.setText("");
+         txtUrl.setText("www.");
         //Mandar a la ventana de la url para editar las palabras clave.
     }
 
