@@ -17,7 +17,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
          <children>
-            <Label fx:id="lblUrl" text="URL" textFill="WHITE">
+            <Label fx:id="lblUrl" onMouseClicked="#openUrl" text="URL" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="18.0" />
                </font>
@@ -52,7 +52,7 @@
                </VBox.margin>
             </Label>
             <ListView fx:id="listKeyWords" onMouseClicked="#itemSelected" VBox.vgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onMouseClicked="#deleteURL" text="Eliminar URL">
+            <Button mnemonicParsing="false" onMouseClicked="#deleteKeyWord" text="Eliminar tag">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

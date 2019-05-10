@@ -8,6 +8,9 @@ package projectstructures;
 import entities.KeyWord;
 import entities.Trees;
 import entities.Url;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -32,6 +35,7 @@ public class UrlWindowController implements Initializable {
     public Url url;
     private ArrayList<KeyWord> keyWords;
     private ObservableList<KeyWord> observable; 
+    private KeyWord keyWordSelected;
 
     @FXML
     private TextField txtKeyWord;
@@ -52,7 +56,7 @@ public class UrlWindowController implements Initializable {
 
     @FXML
     private void itemSelected(MouseEvent event) {
-        
+        keyWordSelected = listKeyWords.getSelectionModel().getSelectedItem();
     }
     
     public void initData(Url url) {
@@ -65,9 +69,6 @@ public class UrlWindowController implements Initializable {
         
     }
 
-    @FXML
-    private void deleteURL(MouseEvent event) {
-    }
 
     @FXML
     private void addKeyWord(MouseEvent event) {
@@ -75,14 +76,29 @@ public class UrlWindowController implements Initializable {
         if(keyWords.contains(new KeyWord(stringKeyWord))) {
             KeyWord oldKeyWord = keyWords.get(keyWords.indexOf(new KeyWord(stringKeyWord)));
             url.AddKeyWord(oldKeyWord);
-            oldKeyWord.AddUrl(url);
+            oldKeyWord.addUrl(url);
         } else {
             KeyWord newKeyWord = new KeyWord(stringKeyWord);
-            newKeyWord.AddUrl(url);
+            newKeyWord.addUrl(url);
             url.AddKeyWord(newKeyWord);
             Trees.getInstance().addKeyWord(newKeyWord);
         }
         observable.setAll(url.getKeyWords());
+    }
+
+    @FXML
+    private void deleteKeyWord(MouseEvent event) {
+        if(keyWordSelected != null) {
+            url.deleteKeyword(keyWordSelected);
+            keyWordSelected.deleteUrl(url);
+            observable.setAll(url.getKeyWords());
+            keyWordSelected = null;
+        }
+    }
+
+    @FXML
+    private void openUrl(MouseEvent event) throws IOException, URISyntaxException {
+        java.awt.Desktop.getDesktop().browse(new URI(url.toString()));
     }
     
   

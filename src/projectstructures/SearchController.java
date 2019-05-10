@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.textfield.TextFields;
 
 /**
  * FXML Controller class
@@ -55,7 +56,7 @@ public class SearchController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        TextFields.bindAutoCompletion(txtSearch, Trees.getInstance().getKeyWordList());
     }    
 
     @FXML
@@ -67,7 +68,6 @@ public class SearchController implements Initializable {
         Long finMS = System.currentTimeMillis();
         observable = FXCollections.observableArrayList(searchResult);
         listResult.setItems(observable);
-        
         Long time = finMS - iniMS;
         lblTime.setText(searchResult.size() + " resultados en : " + time + " milisegundos.");
     }
@@ -78,6 +78,7 @@ public class SearchController implements Initializable {
         ArrayList<Url> searchResult = Trees.getInstance().searchByUrl(toSearch);
         observable = FXCollections.observableArrayList(searchResult);
         listResult.setItems(observable);
+        System.out.println(searchResult.size());
     }
 
     @FXML
