@@ -84,14 +84,15 @@ public class AddController implements Initializable {
         Stream.iterate(0, x -> x+1).limit(numRept).forEach(x -> {
             String url = "";
             String keyW = "";
-            int numCaracUrl = rm.nextInt(6) + 10;
-            int numCaracKW = rm.nextInt(5) + 4;
+            int numCaracUrl = rm.nextInt(4) + 5;
+            int numCaracKW = rm.nextInt(4) + 5;
             for (int j = 0; j < numCaracUrl; j++) {
                 url += (char)( rm.nextInt(26) + 97);
-                if(j<numCaracKW) keyW +=(char)( rm.nextInt(26) + 97);
+                keyW += (char)( rm.nextInt(58) + 65);
+                //if(j < numCaracKW) keyW += (char)( rm.nextInt(58) + 65);
             }
-                keyWords.addKeyWord(new KeyWord(keyW));
-                urls.insert(new Url("www." + url + ".com"));
+            keyWords.addKeyWord(new KeyWord(keyW));
+            urls.insert(new Url("www." + url + ".com"));
         });
       }
       
@@ -103,7 +104,7 @@ public class AddController implements Initializable {
               Stream.iterate(0, x -> x+1).limit(numKeyWordsByUrl).forEach(x -> {
                     KeyWord key = keyWords.get(new Random().nextInt(keyWords.size()));
                     url.AddKeyWord(key);
-                    key.AddUrl(url);
+                    key.addUrl(url);
               });
           }
       }

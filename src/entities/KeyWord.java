@@ -15,11 +15,11 @@ import java.util.TreeSet;
 public class KeyWord implements Comparable<KeyWord>{
     
     private String name;
-    private TreeSet<Url> Urls;
+    private TreeSet<Url> urls;
 
     public KeyWord(String name) {
         this.name = name;
-        Urls = new TreeSet<>();
+        urls = new TreeSet<>();
     }
 
     public String getName() {
@@ -27,11 +27,15 @@ public class KeyWord implements Comparable<KeyWord>{
     }
 
     public ArrayList<Url> getUrls() {
-        return new ArrayList<>(Urls);
+        return new ArrayList<>(urls);
     }
     
-    public void AddUrl(Url url){
-        Urls.add(url);
+    public void addUrl(Url url){
+        urls.add(url);
+    }
+    
+    public void deleteUrl(Url url) {
+        urls.remove(url);
     }
 
     @Override
