@@ -84,4 +84,6 @@ public class UrlWindowController implements Initializable {
         }
         observable.setAll(url.getKeyWords());
     }
+    
+  
 }

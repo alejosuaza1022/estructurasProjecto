@@ -48,7 +48,9 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
             if(item.compareTo(nodeParent.item)<=0) nodeParent.left = new BinaryNode<>(item,null,null);
             else                                   nodeParent.right = new BinaryNode<>(item,null,null);
             return;
-      }else{
+      }
+     else if(nodeCurrent.item.compareTo(item) == 0) return;
+     else{
              if(item.compareTo(nodeCurrent.item)<=0) insert(nodeCurrent.left, nodeCurrent, item);
              else                                    insert(nodeCurrent.right, nodeCurrent, item);
           

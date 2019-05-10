@@ -77,7 +77,8 @@ public class Trees {
     }
     
     public void addKeyWord(KeyWord k) {
-        listKeyWords.add(k);
-        keyWords.insert(k);
+        if(listKeyWords.add(k));        keyWords.insert(k);
+
     }
+   
 }
