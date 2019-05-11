@@ -92,6 +92,7 @@ public class UrlWindowController implements Initializable {
             url.deleteKeyword(keyWordSelected);
             keyWordSelected.deleteUrl(url);
             observable.setAll(url.getKeyWords());
+            if(keyWordSelected.getUrls().isEmpty())  Trees.getInstance().getKeyWordsTree().delete(keyWordSelected);
             keyWordSelected = null;
         }
     }

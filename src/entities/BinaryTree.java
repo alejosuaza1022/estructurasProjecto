@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -114,6 +115,76 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
 
     public String toStringInOrder() {
         return toStringInOrder(root);
+    }
+
+    private BinaryNode<T> find(T item,BinaryNode<T> current){
+        if(current == null)
+            return null;
+        else {
+            if(item.compareTo(current.item)==0) return current;
+            else if(item.compareTo(current.item)<0) return find(item, current.left);
+            return find(item, current.right);
+        }
+    }
+    
+    
+    public BinaryNode<T> find(T item){
+        return find(item, root);
+    }
+    
+   
+    private BinaryNode<T>findParent(BinaryNode<T> current,BinaryNode<T> parent,BinaryNode<T> toFind){
+        if(current == null)
+            return null;
+        else
+            if(toFind.item.compareTo(current.item)==0) return parent;
+            else if(toFind.item.compareTo(current.item)<0)  return findParent(current.left, current, toFind);
+            return findParent(current.right, current, toFind);
+    }
+    
+    
+    private BinaryNode<T>findParent(T toFind){
+        BinaryNode<T> node = find(toFind);
+        return findParent(root, null, node);
+    }
+    
+   private BinaryNode<T> findsuccessor(BinaryNode<T> current,BinaryNode<T> parent){
+        if(current == null)  return parent;
+        else                 return findsuccessor(current.left, current);
+
+    }
+   
+   
+    public BinaryNode findSuccessor(T item){
+        return findsuccessor(find(item).right, null);
+    }
+    public void delete(T item){
+        deleteRecursivo(root, item);
+    }
+     private BinaryNode<T> deleteRecursivo(BinaryNode<T> node, T toDelete){
+        if(root.item.compareTo(toDelete) == 0){
+            node = findSuccessor(toDelete);
+            BinaryNode pare = findParent(node.item);
+            pare.left = null;
+            if(root.left != null)node.left = root.left;
+            if(root.right != null)node.right = root.right;
+            root = node;
+            return node;
+        }
+        else{
+              if (node == null)   return node;
+              if (node.item.compareTo(toDelete) > 0)       node.left = deleteRecursivo(node.left, toDelete);
+              else if (node.item.compareTo(toDelete) < 0)  node.right = deleteRecursivo(node.right, toDelete);
+              else {
+                  if(node.left == null)       return node.right;
+                  else if(node.right == null) return node.left;
+                  else{
+                      node.item = (T)findSuccessor(node.right.item).item;
+                      node.right = deleteRecursivo(node.right, node.item);
+                  }
+              }
+              return node;
+        }
     }
 
     private String toStringInOrder(BinaryNode<T> node) {
