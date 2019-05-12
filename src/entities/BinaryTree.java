@@ -60,12 +60,10 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
             if(k<0){
                 node.left = insert(node.left, value);
             }
-            else if(k>0) {
+            else  {
                 node.right = insert(node.right, value);
             }
-            else{
-                return root;
-            }
+           
             node.height = Math.max(height(node.left), height(node.right)) + 1;
             // 2. Balancear el camino por donde paso para insertarse
             int diff = diffHeight(node);
