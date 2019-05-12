@@ -18,18 +18,20 @@ import javax.swing.text.Position;
  */
 public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
     
-    private BinaryNode<T> root;
+    private AVLNode<T> root;
 
-    private class BinaryNode<T extends Comparable<T>> implements Comparable<BinaryNode<T>> {
+    private class AVLNode<T extends Comparable<T>> implements Comparable<AVLNode<T>> {
 
+        public AVLNode<T> left;
+        public AVLNode<T> right;
         public T item;
-        public BinaryNode<T> left;
-        public BinaryNode<T> right;
-
-        public BinaryNode(T item, BinaryNode<T> left, BinaryNode<T> right) {
+        private int height;
+        
+        public AVLNode(T item) {
             this.item = item;
             this.left = left;
             this.right = right;
+             height = 1;
         }
 
         @Override
@@ -38,35 +40,87 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         }
 
         @Override
-        public int compareTo(BinaryNode<T> o) {
+        public int compareTo(AVLNode<T> o) {
            return item.compareTo(o.item);
           }
 
     }
    
-    private  void insert(BinaryNode<T> nodeCurrent, BinaryNode<T> nodeParent, T item){
-     if(nodeCurrent == null){
-            if(item.compareTo(nodeParent.item)<=0) nodeParent.left = new BinaryNode<>(item,null,null);
-            else                                   nodeParent.right = new BinaryNode<>(item,null,null);
-            return;
-      }
-     else if(nodeCurrent.item.compareTo(item) == 0) return;
-     else{
-             if(item.compareTo(nodeCurrent.item)<=0) insert(nodeCurrent.left, nodeCurrent, item);
-             else                                    insert(nodeCurrent.right, nodeCurrent, item);
-          
-             return;
-         }
+   
+    public void insert(T value){
+        root  = root == null ? new AVLNode<>(value) : insert(root, value);
+
     }
     
-    public void insert(T item){
-        if(root == null) root = new BinaryNode<>(item, null,null);
-        else
-        insert(root, null, item);
+     private AVLNode<T> insert(AVLNode<T> node, T value){
+        if(node == null) return new AVLNode<>(value);
+        else{
+            //1. insertar recursivamente el nuevo nodo
+            int k = value.compareTo(node.item);
+            if(k<0){
+                node.left = insert(node.left, value);
+            }
+            else if(k>0) {
+                node.right = insert(node.right, value);
+            }
+            else{
+                return root;
+            }
+            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            // 2. Balancear el camino por donde paso para insertarse
+            int diff = diffHeight(node);
+            if(diff < -1){
+                if(diffHeight(node.right) > 0)node.right = rotateRight(node.right);
+                //rotateLeft
+                node  = rotateLeft(node);
+                
+            }
+            else if(diff > 1){
+                 if(diffHeight(node.left) < 0)node.left = rotateLeft(node.left);
+                //rotateRight
+                node = rotateRight(node);
+            }
+            return node;
+        }
+    }
+     
+     
+    private int height(AVLNode<T> node){
+        return node == null ? 0 : node.height;
+        
     }
     
+    
+    
+    private int diffHeight(AVLNode<T> node){
+        return node == null ? 0 : height(node.left) -height(node.right);
+    }
+    
+    
+    private AVLNode<T> rotateLeft(AVLNode<T> node) {
+            //raiz
+            AVLNode r = node.right;
+            node.right = r.left;
+            r.left = node;
+            node.height = Math.max(height(node.left), height(node.right)) + 1 ;
+            r.height = Math.max(height(r.left), height(r.right)) + 1;
+            return r;
+
+    } 
+
+    private AVLNode<T> rotateRight(AVLNode<T> node) {
+            //raiz
+           AVLNode r = node.left; 
+           node.left = r.right;
+           r.right = node;
+           node.height = Math.max(height(node.left), height(node.right)) +1;
+           r.height = Math.max(height(r.left), height(r.right)) + 1;
+           return r;
+
+    }
+  
     public ArrayList<T> getListCoincidence(String toSearch) {
-        BinaryNode<T> newRoot = getNodeCoincidence(toSearch, root);
+        AVLNode <T> newRoot = getNodeCoincidence(toSearch, root);
         BinaryTree<T> subTree = new BinaryTree<>();
         subTree.root = newRoot;
         ArrayList<T> toReturn = new ArrayList<>();
@@ -76,7 +130,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         return toReturn;
     }
     
-    private BinaryNode<T> getNodeCoincidence(String toSearch, BinaryNode<T> current) {
+    private AVLNode<T> getNodeCoincidence(String toSearch, AVLNode<T> current) {
         if(current == null) return null;
         else if(current.item.toString().startsWith(toSearch)) return current;
         else {
@@ -85,7 +139,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         }
     }
 
-    private T getItem(T item, BinaryNode<T> current){
+    private T getItem(T item, AVLNode<T> current){
         if(current == null)
             return null;
         else {
@@ -94,30 +148,12 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
             return getItem(item, current.right);
         }
     }
-        public T getItem(T item){
+    
+   public T getItem(T item){
         return getItem(item, root);
     }
   
-    public String toStringPreOrder() {
-        return toStringPreOrder(root);
-    }
-
-    private String toStringPreOrder(BinaryNode<T> node) {
-        if (node == null) {
-            return "";
-        }
-        String r = "";
-        r += node.item + " ";
-        r += toStringPreOrder(node.left) ;
-        r += toStringPreOrder(node.right) ;
-        return r;
-    }
-
-    public String toStringInOrder() {
-        return toStringInOrder(root);
-    }
-
-    private BinaryNode<T> find(T item,BinaryNode<T> current){
+    private AVLNode<T> find(T item,AVLNode<T> current){
         if(current == null)
             return null;
         else {
@@ -128,12 +164,17 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
     }
     
     
-    public BinaryNode<T> find(T item){
+    public AVLNode<T> find(T item){
         return find(item, root);
     }
     
    
-    private BinaryNode<T>findParent(BinaryNode<T> current,BinaryNode<T> parent,BinaryNode<T> toFind){
+    private AVLNode<T>findParent(T toFind){
+        AVLNode<T> node = find(toFind);
+        return findParent(root, null, node);
+    }
+    
+    private AVLNode<T>findParent(AVLNode<T> current,AVLNode<T> parent,AVLNode<T> toFind){
         if(current == null)
             return null;
         else
@@ -143,28 +184,24 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
     }
     
     
-    private BinaryNode<T>findParent(T toFind){
-        BinaryNode<T> node = find(toFind);
-        return findParent(root, null, node);
+    
+    public AVLNode findSuccessor(T item){
+        return findsuccessor(find(item).right, null);
     }
     
-   private BinaryNode<T> findsuccessor(BinaryNode<T> current,BinaryNode<T> parent){
+   private AVLNode<T> findsuccessor(AVLNode<T> current,AVLNode<T> parent){
         if(current == null)  return parent;
         else                 return findsuccessor(current.left, current);
 
     }
-   
-   
-    public BinaryNode findSuccessor(T item){
-        return findsuccessor(find(item).right, null);
-    }
+    
     public void delete(T item){
         deleteRecursivo(root, item);
     }
-     private BinaryNode<T> deleteRecursivo(BinaryNode<T> node, T toDelete){
+    private AVLNode<T> deleteRecursivo(AVLNode<T> node, T toDelete){
         if(root.item.compareTo(toDelete) == 0){
             node = findSuccessor(toDelete);
-            BinaryNode pare = findParent(node.item);
+            AVLNode pare = findParent(node.item);
             pare.left = null;
             if(root.left != null)node.left = root.left;
             if(root.right != null)node.right = root.right;
@@ -187,57 +224,10 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         }
     }
 
-    private String toStringInOrder(BinaryNode<T> node) {
-        if (node == null) {
-            return "";
-        }
-        String r = "";
-       
-        r += toStringInOrder(node.left) + "";
-       
-        r += node.item + " ";
-        
-        r += toStringInOrder(node.right)+"";
-        
-        return r;
-    }
-
-    public String toStringPosOrder() {
-        return toStringPosOrder(root);
-    }
-
-    private String toStringPosOrder(BinaryNode<T> node) {
-        if (node == null) {
-            return "";
-        }
-        String r = "";
-        r += toStringPosOrder(node.left);
-        r += toStringPosOrder(node.right);
-        r += node.item;
-        return r;
-    }
-    
-    public String toStringLevelOrder() {
-        Queue c = new LinkedList();{{ c.add(root);}};
-        return toStringLevelOrder(c);
-    }
-
-    private String toStringLevelOrder(Queue list) {
-        if (list.isEmpty()) 
-            return "";
-        else {
-            BinaryNode n = (BinaryNode) list.remove();
-            if (n.left != null)  list.add(n.left);
-            if (n.right != null) list.add(n.right);
-            String r = n.item.toString();
-            return r += toStringLevelOrder(list);
-        }
-    }
-    
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            Queue<BinaryNode<T>> list = new LinkedList<BinaryNode<T>>();
+            Queue<AVLNode<T>> list = new LinkedList<>();
             {list.add(root);}
             @Override
             public boolean hasNext() {
@@ -246,7 +236,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
 
             @Override
             public T next() {
-              BinaryNode<T> node = list.remove();
+                AVLNode<T> node = list.remove();
                 if(node.left != null)list.add(node.left);
                 if(node.right != null)list.add(node.right);
                 return node.item;
@@ -254,6 +244,35 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         };
 
     }
+    public String toStringPreOrder() {
+        return toStringPreOrder(root);
+    }
+
+    private String toStringPreOrder(AVLNode<T> node) {
+        if (node == null) {
+            return "";
+        }
+        String r = "";
+        r += node.item + " level " +node.height + " ";
+        r += toStringPreOrder(node.left) + "";
+        r += toStringPreOrder(node.right)+"";
+        return r;
+    }
+      public String toStringInOrder() {
+        return toStringInOrder(root);
+    }
+
+    private String toStringInOrder(AVLNode<T> node) {
+        if (node == null) {
+            return "";
+        }
+        String r = "";
+        r += toStringInOrder(node.left) + "";
+        r += node.item + " level " + node.height + " ";
+        r += toStringInOrder(node.right)+"";
+        return r  ;
+    }
+
 }
     
     

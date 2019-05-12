@@ -59,10 +59,10 @@ public class AddController implements Initializable {
         String url = txtUrl.getText();
         Url newUrl = new Url(url);
         BinaryTree<Url> urls = Trees.getInstance().getUrlTree();
-        if(urls.getItem(newUrl) == null)
-            urls.insert(newUrl);
+        if(urls.getItem(newUrl) == null)urls.insert(newUrl);
          txtUrl.setText("www.");
-        //Mandar a la ventana de la url para editar las palabras clave.
+         System.out.println(urls.toStringInOrder());
+         System.out.println(urls.toStringPreOrder() + "pre");
     }
 
     @FXML
