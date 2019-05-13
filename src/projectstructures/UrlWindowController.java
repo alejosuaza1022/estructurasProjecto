@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javax.swing.JOptionPane;
 import org.controlsfx.control.textfield.TextFields;
 
 /**
@@ -51,6 +52,8 @@ public class UrlWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        JOptionPane.showMessageDialog(null, " prodra agregar varias palabras \n tenga en cuenta"
+                + " que un espacio \n separa una palabra clave","Info",JOptionPane.WARNING_MESSAGE);
         // TODO
     }    
 
@@ -72,18 +75,22 @@ public class UrlWindowController implements Initializable {
 
     @FXML
     private void addKeyWord(MouseEvent event) {
-        String stringKeyWord = txtKeyWord.getText();
-        if(keyWords.contains(new KeyWord(stringKeyWord))) {
-            KeyWord oldKeyWord = keyWords.get(keyWords.indexOf(new KeyWord(stringKeyWord)));
-            url.AddKeyWord(oldKeyWord);
-            oldKeyWord.addUrl(url);
-        } else {
-            KeyWord newKeyWord = new KeyWord(stringKeyWord);
-            newKeyWord.addUrl(url);
-            url.AddKeyWord(newKeyWord);
-            Trees.getInstance().addKeyWord(newKeyWord);
+        String arraystringKeyWord = txtKeyWord.getText();
+        String [] array = arraystringKeyWord.split(" ");
+        for (String stringKeyWord : array) {
+            if(keyWords.contains(new KeyWord(stringKeyWord))) {
+                KeyWord oldKeyWord = keyWords.get(keyWords.indexOf(new KeyWord(stringKeyWord)));
+                url.AddKeyWord(oldKeyWord);
+                oldKeyWord.addUrl(url);
+            } else {
+                KeyWord newKeyWord = new KeyWord(stringKeyWord);
+                newKeyWord.addUrl(url);
+                url.AddKeyWord(newKeyWord);
+                Trees.getInstance().addKeyWord(newKeyWord);
+            }
         }
         observable.setAll(url.getKeyWords());
+        txtKeyWord.setText("");
     }
 
     @FXML

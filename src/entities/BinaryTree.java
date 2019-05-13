@@ -47,9 +47,12 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
     }
    
    
-    public void insert(T value){
-        root  = root == null ? new AVLNode<>(value) : insert(root, value);
-
+    public boolean insert(T value){
+        if(find(value) == null){
+           root  = root == null ? new AVLNode<>(value) : insert(root, value);
+           return true;
+        }
+        return false;
     }
     
      private AVLNode<T> insert(AVLNode<T> node, T value){

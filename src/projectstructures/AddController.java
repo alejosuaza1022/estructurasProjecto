@@ -5,7 +5,6 @@
  */
 package projectstructures;
 
-import com.sun.org.apache.xpath.internal.compiler.Keywords;
 import entities.BinaryTree;
 import entities.Trees;
 import entities.Url;
@@ -22,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import entities.KeyWord;
 import java.util.TreeSet;
 import java.util.stream.Stream;
+import javax.swing.JOptionPane;
 /**
  * FXML Controller class
  *
@@ -56,13 +56,13 @@ public class AddController implements Initializable {
 
     @FXML
     private void addUrl(MouseEvent event) {
-        String url = txtUrl.getText();
-        Url newUrl = new Url(url);
-        BinaryTree<Url> urls = Trees.getInstance().getUrlTree();
-        if(urls.getItem(newUrl) == null)urls.insert(newUrl);
-         txtUrl.setText("www.");
-         System.out.println(urls.toStringInOrder());
-         System.out.println(urls.toStringPreOrder() + "pre");
+        String url = txtUrl.getText().trim();
+        if(!url.equals("www.")){
+            Url newUrl = new Url(url);
+            BinaryTree<Url> urls = Trees.getInstance().getUrlTree();
+            if(urls.insert(newUrl)) JOptionPane.showMessageDialog(null, " agregado ");
+            txtUrl.setText("www.");
+        }
     }
 
     @FXML
