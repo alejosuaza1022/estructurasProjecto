@@ -21,7 +21,7 @@ public class ArbolExpresionGrafico extends JPanel
     private HashMap posicionNodos = null;
     private HashMap subtreeSizes = null;
     private boolean dirty = true;
-    private int parent2child = 60, child2child = 70;
+    private int parent2child = 20, child2child = 10;
     private Dimension empty = new Dimension(0,0);
     private FontMetrics fm = null;
     
@@ -117,6 +117,7 @@ public class ArbolExpresionGrafico extends JPanel
       else if (left != Integer.MAX_VALUE)
           center = left + ld.width + child2child/2;
       int width = fm.stringWidth(n.item+"");
+        if((width/2)+20>child2child)child2child = (width/2)+20;
        Shape theCircle = new Ellipse2D.Double(center - width/2-3, top,width + 12,fm.getHeight() + 4); 
       posicionNodos.put(n,theCircle);
       
