@@ -19,33 +19,10 @@ import javax.swing.text.Position;
 public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
     
     private AVLNode<T> root;
-
-    private class AVLNode<T extends Comparable<T>> implements Comparable<AVLNode<T>> {
-
-        public AVLNode<T> left;
-        public AVLNode<T> right;
-        public T item;
-        private int height;
-        
-        public AVLNode(T item) {
-            this.item = item;
-            this.left = left;
-            this.right = right;
-             height = 1;
-        }
-
-        @Override
-        public String toString() {
-            return item.toString();
-        }
-
-        @Override
-        public int compareTo(AVLNode<T> o) {
-           return item.compareTo(o.item);
-          }
-
+    public AVLNode<T> getRoot(){
+        return root;
     }
-   
+    
    
     public boolean insert(T value){
         if(find(value) == null){
@@ -67,7 +44,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
                 node.right = insert(node.right, value);
             }
            
-            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            node.setHeight(Math.max(height(node.left), height(node.right)) + 1);
             // 2. Balancear el camino por donde paso para insertarse
             int diff = diffHeight(node);
             if(diff < -1){
@@ -87,7 +64,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
      
      
     private int height(AVLNode<T> node){
-        return node == null ? 0 : node.height;
+        return node == null ? 0 : node.height();
         
     }
     
@@ -103,8 +80,8 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
             AVLNode r = node.right;
             node.right = r.left;
             r.left = node;
-            node.height = Math.max(height(node.left), height(node.right)) + 1 ;
-            r.height = Math.max(height(r.left), height(r.right)) + 1;
+            node.setHeight(Math.max(height(node.left), height(node.right)) + 1) ;
+            r.setHeight( Math.max(height(r.left), height(r.right)) + 1);
             return r;
 
     } 
@@ -114,8 +91,8 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
            AVLNode r = node.left; 
            node.left = r.right;
            r.right = node;
-           node.height = Math.max(height(node.left), height(node.right)) +1;
-           r.height = Math.max(height(r.left), height(r.right)) + 1;
+           node.setHeight(Math.max(height(node.left), height(node.right)) +1);
+           r.setHeight( Math.max(height(r.left), height(r.right)) + 1);
            return r;
 
     }
@@ -254,7 +231,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
             return "";
         }
         String r = "";
-        r += node.item + " level " +node.height + " ";
+        r += node.item + " level " +node.height() + " ";
         r += toStringPreOrder(node.left) + "";
         r += toStringPreOrder(node.right)+"";
         return r;
@@ -269,10 +246,11 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T>{
         }
         String r = "";
         r += toStringInOrder(node.left) + "";
-        r += node.item + " level " + node.height + " ";
+        r += node.item + " level " + node.height() + " ";
         r += toStringInOrder(node.right)+"";
         return r  ;
     }
+    
 
 }
     

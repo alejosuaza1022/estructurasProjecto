@@ -5,10 +5,12 @@
  */
 package entities;
 
+import arbolBB.ArbolExpresionGrafico;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.swing.JPanel;
 
 
 /**
@@ -79,6 +81,9 @@ public class Trees {
     public void addKeyWord(KeyWord k) {
         if(listKeyWords.add(k));        keyWords.insert(k);
 
+    }
+     public JPanel getdibujo(int i) {
+        return (i == 0 ) ? new ArbolExpresionGrafico(urls) : new ArbolExpresionGrafico(keyWords);
     }
    
 }

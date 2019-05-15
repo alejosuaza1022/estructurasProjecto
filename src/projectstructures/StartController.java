@@ -5,6 +5,7 @@
  */
 package projectstructures;
 
+import arbolBB.Vistaa;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -71,6 +73,19 @@ public class StartController implements Initializable {
 
     @FXML
     private void tree(MouseEvent event) {
+        int seleccion = JOptionPane.showOptionDialog(null," ¿Cuál arbol desea ver? ", "elección de arbol",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null, 
+                new String[] { "UrlTree", "KeyWordTree" }, 0);
+        System.out.println(seleccion);
+//        int seleccion = JOptionPane.showOptionDialog(null,
+//       JOptionPane.YES_NO_CANCEL_OPTION,
+//       JOptionPane.QUESTION_MESSAGE,
+//        
+//   new Object[] { "opcion 1", "opcion 2", "opcion 3" },   // null para YES, NO y CANCEL
+//   "opcion 1");
+//        JOptionPane.showConfirmDialog(parentComponent, event, IDLE_BUTTON_STYLE, 0)
+        Vistaa c = new Vistaa(0);
+        c.show();
+        
     }
 
     @FXML
